@@ -9,7 +9,8 @@ import { NgForm } from '@angular/forms';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit{
-  public employees: Employee[] | null = null; // public employees: Employee[] | null = [];
+  public employees!: Employee[] | null;
+  public editEmployee!: Employee | null;
 
   constructor (private employeeService: EmployeeService) {}
 
@@ -31,6 +32,16 @@ export class AppComponent implements OnInit{
       (response: Employee) => {
         console.log(response);
         this.getEmployees();
+        addForm.reset();
+      },
+    );
+  }
+
+  public onUpdateEmployee (employee: Employee): void {
+    this.employeeService.updateEmployee(employee).subscribe(
+      (response: Employee) => {
+        console.log(response);
+        this.getEmployees();
       },
     );
   }
@@ -48,6 +59,7 @@ export class AppComponent implements OnInit{
     }
 
     if (mode === 'edit') {
+      this.editEmployee = employee;
       button.setAttribute('data-target', '#updateEmployeeModal');
     }
 
