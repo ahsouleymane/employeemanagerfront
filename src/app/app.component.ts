@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from './employee';
 import { EmployeeService } from './employee.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { EmployeeService } from './employee.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit{
-  public employees: Employee[] = [];
+  public employees: Employee[] | null = null; // public employees: Employee[] | null = [];
 
   constructor (private employeeService: EmployeeService) {}
 
@@ -24,8 +25,14 @@ export class AppComponent implements OnInit{
     );
   }
 
-  public onAddEmployee (addForm) {
-    
+  public onAddEmployee (addForm: NgForm): void {
+    document.getElementById('add-employee-form')?.click();
+    this.employeeService.addEmployee(addForm.value).subscribe(
+      (response: Employee) => {
+        console.log(response);
+        this.getEmployees();
+      },
+    );
   }
 
   public onOpenModal (employee: Employee | null, mode: string): void {
